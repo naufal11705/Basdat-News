@@ -238,9 +238,10 @@
             <h2>Berita Terbaru</h2>
             <div class="news-list">
                 <div class="news-item">
-                    <h3>Utut Sebut Kemlu Minta Anggaran Rp 20 T: Saya Duga Bukan Terinspirasi Pigai</h3>
+                    <p><a href="berita.html"><h3>Utut Sebut Kemlu Minta Anggaran Rp 20 T: Saya Duga Bukan Terinspirasi Pigai</h3></a></p>
                     <p>Jakarta - Ketua Komisi I DPR RI, Utut Adianto, mengatakan Kementerian Luar Negeri (Kemlu) RI meminta anggaran sebesar Rp 20 triliun untuk periode yang akan datang.</p>
-                    <p><a href="berita.html">Baca Selengkapnya</a></p>
+                    <p>27/November/2024</p>
+                    <p><a href="kategori.php">Artikel</a></p>
                 </div>
                 <div class="news-item">
                 <h3>Utut Sebut Kemlu Minta Anggaran Rp 20 T: Saya Duga Bukan Terinspirasi Pigai</h3>
