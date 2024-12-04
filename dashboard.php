@@ -15,12 +15,14 @@ $db = getDB();
 $categoryCollection = $db->categories;
 $categories = $categoryCollection->find();
 
-function generateSlug($title) {
+function generateSlug($title)
+{
     return strtolower(preg_replace('/[^a-zA-Z0-9]+/', '-', trim($title)));
 }
 ?>
 
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -199,6 +201,7 @@ function generateSlug($title) {
             text-align: center;
             padding: 16px 0;
         }
+
         .login-button {
             display: inline-block;
             background: #007BFF;
@@ -223,8 +226,7 @@ function generateSlug($title) {
             text-decoration: none;
         }
 
-        #title
-        {
+        #title {
             font-family: 'Segoe UI';
             font-size: 20px;
         }
@@ -254,9 +256,9 @@ function generateSlug($title) {
             color: #fff;
             border-color: #007bff;
         }
-
     </style>
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -289,30 +291,34 @@ function generateSlug($title) {
         <div class="container">
             <h2>Kategori Berita</h2>
             <div class="category-list">
-            <?php foreach ($categories as $category): ?>
-                <div class="category-item"><?= htmlspecialchars($category['name']) ?></div>
-            <?php endforeach; ?>
+                <div class="category-item" data-category="all">Semua</div>
+                <?php foreach ($categories as $category): ?>
+                    <div class="category-item" data-category="<?= htmlspecialchars($category['name']) ?>">
+                        <?= htmlspecialchars($category['name']) ?>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
+
 
     <section id="latest-news" class="news">
         <div class="container">
             <h2>Berita Terbaru</h2>
             <div class="news-list">
-            <?php foreach ($posts as $post): ?>
-                <?php $slug = generateSlug($post['title']); ?>
-                <div class="news-item" data-category="<?= htmlspecialchars($post['category']) ?>">
-                    <h3>
-                        <a id="title" href="berita/<?= $slug ?>">
-                            <?= htmlspecialchars($post['title']) ?>
-                        </a>
-                    </h3>
-                    <p id="summary"><?= nl2br(htmlspecialchars($post['summary'])) ?></p>
-                    <p id="date"><?= htmlspecialchars($post['created_at']->toDateTime()->format('F j, Y')) ?></p>
-                    <p><?= htmlspecialchars($post['category']) ?></p>
-                </div>
-            <?php endforeach; ?>
+                <?php foreach ($posts as $post): ?>
+                    <?php $slug = generateSlug($post['title']); ?>
+                    <div class="news-item" data-category="<?= htmlspecialchars($post['category']) ?>">
+                        <h3>
+                            <a id="title" href="berita/<?= $slug ?>">
+                                <?= htmlspecialchars($post['title']) ?>
+                            </a>
+                        </h3>
+                        <p id="summary"><?= nl2br(htmlspecialchars($post['summary'])) ?></p>
+                        <p id="date"><?= htmlspecialchars($post['created_at']->toDateTime()->format('F j, Y')) ?></p>
+                        <p><?= htmlspecialchars($post['category']) ?></p>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
@@ -325,18 +331,21 @@ function generateSlug($title) {
 
     <script>
         function scrollToSection(id) {
-            document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+            document.getElementById(id).scrollIntoView({
+                behavior: "smooth"
+            });
         }
+
 
         document.addEventListener("DOMContentLoaded", () => {
             const categoryItems = document.querySelectorAll(".category-item");
             const newsItems = document.querySelectorAll(".news-item");
 
-            categoryItems.forEach(item => {
+            categoryItems.forEach((item) => {
                 item.addEventListener("click", () => {
                     const selectedCategory = item.getAttribute("data-category");
 
-                    newsItems.forEach(news => {
+                    newsItems.forEach((news) => {
                         const newsCategory = news.getAttribute("data-category");
 
                         if (selectedCategory === "all" || newsCategory === selectedCategory) {
@@ -345,12 +354,13 @@ function generateSlug($title) {
                             news.style.display = "none";
                         }
                     });
-                    
-                    categoryItems.forEach(cat => cat.classList.remove("active"));
+
+                    categoryItems.forEach((cat) => cat.classList.remove("active"));
                     item.classList.add("active");
                 });
             });
         });
     </script>
 </body>
+
 </html>
