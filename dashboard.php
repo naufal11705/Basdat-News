@@ -24,6 +24,8 @@ function generateSlug($title) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <title>BeritaKini</title>
     <style>
         /* Style Global*/
@@ -221,6 +223,38 @@ function generateSlug($title) {
             text-decoration: none;
         }
 
+        #title
+        {
+            font-family: 'Segoe UI';
+            font-size: 20px;
+        }
+
+        #summary {
+            font-family: 'Segoe UI';
+            font-size: 16px;
+        }
+
+        #date {
+            font-family: 'Segoe UI';
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .category-item {
+            cursor: pointer;
+            padding: 5px 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .category-item.active {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
     </style>
 </head>
 <body>
@@ -268,14 +302,14 @@ function generateSlug($title) {
             <div class="news-list">
             <?php foreach ($posts as $post): ?>
                 <?php $slug = generateSlug($post['title']); ?>
-                <div class="news-item">
+                <div class="news-item" data-category="<?= htmlspecialchars($post['category']) ?>">
                     <h3>
-                        <a href="berita.php?slug=<?= $slug ?>">
+                        <a id="title" href="berita/<?= $slug ?>">
                             <?= htmlspecialchars($post['title']) ?>
                         </a>
                     </h3>
-                    <p><?= nl2br(htmlspecialchars($post['summary'])) ?></p>
-                    <p><?= htmlspecialchars($post['created_at']->toDateTime()->format('F j, Y')) ?></p>
+                    <p id="summary"><?= nl2br(htmlspecialchars($post['summary'])) ?></p>
+                    <p id="date"><?= htmlspecialchars($post['created_at']->toDateTime()->format('F j, Y')) ?></p>
                     <p><?= htmlspecialchars($post['category']) ?></p>
                 </div>
             <?php endforeach; ?>
@@ -293,6 +327,30 @@ function generateSlug($title) {
         function scrollToSection(id) {
             document.getElementById(id).scrollIntoView({ behavior: "smooth" });
         }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const categoryItems = document.querySelectorAll(".category-item");
+            const newsItems = document.querySelectorAll(".news-item");
+
+            categoryItems.forEach(item => {
+                item.addEventListener("click", () => {
+                    const selectedCategory = item.getAttribute("data-category");
+
+                    newsItems.forEach(news => {
+                        const newsCategory = news.getAttribute("data-category");
+
+                        if (selectedCategory === "all" || newsCategory === selectedCategory) {
+                            news.style.display = "block";
+                        } else {
+                            news.style.display = "none";
+                        }
+                    });
+                    
+                    categoryItems.forEach(cat => cat.classList.remove("active"));
+                    item.classList.add("active");
+                });
+            });
+        });
     </script>
 </body>
 </html>
