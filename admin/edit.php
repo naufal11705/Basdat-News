@@ -1,3 +1,37 @@
+<?php
+require '../db.php'; 
+
+if (isset($_GET['id'])) {
+    $newsId = $_GET['id'];
+    $db = getDB();
+    $collection = $db->news; 
+
+    $newsItem = $collection->findOne(['_id' => new MongoDB\BSON\ObjectId($newsId)]);
+
+    if (!$newsItem) {
+        die("Berita tidak ditemukan.");
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $updatedData = [
+            'title' => $_POST['title'],
+            'content' => $_POST['content'],
+            'summary' => $_POST['summary'],
+            'category' => $_POST['category'],
+            'author' => $_POST['author'],
+            'date_published' => new MongoDB\BSON\UTCDateTime() 
+        ];
+
+        $collection->updateOne(['_id' => new MongoDB\BSON\ObjectId($newsId)], ['$set' => $updatedData]);
+
+        header("Location: dashboardAdmin.php");
+        exit;
+    }
+} else {
+    die("ID berita tidak diberikan.");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

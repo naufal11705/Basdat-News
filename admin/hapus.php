@@ -1,3 +1,27 @@
+<?php
+require '../db.php'; 
+
+if (isset($_GET['id'])) {
+    $newsId = $_GET['id'];
+    $db = getDB(); 
+    $collection = $db->news; 
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $collection->deleteOne(['_id' => new MongoDB\BSON\ObjectId($newsId)]);
+
+        header("Location: dashboardAdmin.php");
+        exit;
+    }
+
+    $newsItem = $collection->findOne(['_id' => new MongoDB\BSON\ObjectId($newsId)]);
+    if (!$newsItem) {
+        die("Berita tidak ditemukan.");
+    }
+} else {
+    die("ID berita tidak diberikan.");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,8 +35,8 @@
         <h1>Hapus Berita</h1>
         <p>Apakah Anda yakin ingin menghapus berita ini?</p>
         <form method="POST">
-            <button type="submit">Ya, Hapus</button>
-            <a href="index.php" class="btn">Batal</a>
+            <button type="submit" class="btn delete">Ya, Hapus</button>
+            <a href="dashboardAdmin.php" class="btn">Batal</a>
         </form>
     </div>
 </body>

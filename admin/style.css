@@ -37,6 +37,7 @@ td {
 }
 
 .btn {
+  text-align: center;
   display: inline-block;
   padding: 10px 15px;
   background-color: #007bff;
