@@ -9,66 +9,46 @@ $path = str_replace($base_path, '', $request_uri); // Hilangkan base path dari U
 $segments = explode('/', $path);
 $id = isset($segments[2]) ? $segments[2] : null;
 
-if (!empty($_SESSION['role'])) {
-    require 'fungsi/pesan_kilat.php';
 
-    switch ($path) {
-        case '/':
-            include 'dashboard.php';
-            break;
-        
-        case '/berita/'. $id:
-            include 'berita.php';
-            break;
+switch ($path) {
+    case '/login':
+        include 'login.php';
+        break;
 
-        case '/dashboard':
-            include 'admin/dashboardAdmin.php';
-            break;
+    case '/':
+        include 'dashboard.php';
+        break;
+    
+    case '/berita/'. $id:
+        include 'berita.php';
+        break;
 
-        case '/tambahBerita':
-            include 'admin/tambahBerita.php';
-            break;
+    case '/dashboard':
+        include 'admin/dashboardAdmin.php';
+        break;
 
-        case '/edit':
-            $id = $_GET['id'] ?? null;
-            if ($id) {
-                include 'admin/edit.php';
-            }
-            break;
+    case '/tambahBerita':
+        include 'admin/tambahBerita.php';
+        break;
 
-        case '/hapus':
-            $id = $_GET['id'] ?? null;
-            if ($id) {
-                include 'admin/hapus.php';
-            }
-            break;
+    case '/edit':
+        $id = $_GET['id'] ?? null;
+        if ($id) {
+            include 'admin/edit.php';
+        }
+        break;
 
-        default:
-            header("HTTP/1.0 404 Not Found");
-            echo "404 Not Found - Path: " . $path;
-            break;
-    }
+    case '/hapus':
+        $id = $_GET['id'] ?? null;
+        if ($id) {
+            include 'admin/hapus.php';
+        }
+        break;
 
-} else {
-    require 'fungsi/pesan_kilat.php';
-
-    switch ($path) {
-        case '/':
-            include 'dashboard.php';
-            break;
-
-        case '/login':
-            include 'login.php';
-            break;
-
-        case '/berita/'. $id:
-            include 'berita.php';
-            break;
-
-        default:
-            header("HTTP/1.0 404 Not Found");
-            echo "404 Not Found - Path: " . $path;
-            break;
-    }
+    default:
+        header("HTTP/1.0 404 Not Found");
+        echo "404 Not Found - Path: " . $path;
+        break;
 }
+
 ?>

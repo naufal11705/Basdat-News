@@ -1,10 +1,6 @@
 <?php
 require 'db.php';
 
-$db = getDB();
-$categoryCollection = $db->categories;
-$categories = $categoryCollection->find();
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $db = getDB(); 
     $collection = $db->posts; 
@@ -50,14 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <textarea name="summary" required></textarea>
 
             <label for="category">Kategori:</label>
-            <select name="category" id="category" required>
-                <option value="">Pilih Kategori</option>
-                <?php foreach ($categories as $category): ?>
-                    <option value="<?= htmlspecialchars($category['name']) ?>">
-                        <?= htmlspecialchars($category['name']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+            <input type="text" name="category" required></input>
 
             <label for="author">Penulis:</label>
             <input type="text" name="author" required>

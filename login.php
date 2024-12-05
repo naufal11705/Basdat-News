@@ -90,14 +90,6 @@
 <body>
     <div class="login-container">
         <h1>Login</h1>
-        
-        <?php if (isset($_SESSION['_flashdata'])) {
-            foreach ($_SESSION['_flashdata'] as $key => $val) {
-            echo get_flashdata($key);
-            }
-        }
-        ?>
-
         <form action="cek_login.php" method="post">
             <div class="form-group">
                 <label for="username">Username</label>
@@ -111,9 +103,6 @@
                 <button type="submit">Login</button>
             </div>
         </form>
-        <div class="form-footer">
-            <p>Belum punya akun? <a href="register.php">Daftar Sekarang</a></p>
-        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.3.3/dist/umd/popper.min.js"></script>

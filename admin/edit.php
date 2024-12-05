@@ -58,15 +58,7 @@ if (isset($_GET['id'])) {
             <textarea name="summary" required><?php echo htmlspecialchars($newsItem['summary']); ?></textarea>
             
             <label for="category">Kategori:</label>
-            <select name="category" id="category" required>
-                <option value="">Pilih Kategori</option>
-                <?php foreach ($categories as $category): ?>
-                    <option value="<?= htmlspecialchars($category['name']) ?>"
-                        <?php echo ($newsItem['category'] == $category['name']) ? 'selected' : ''; ?>>
-                        <?= htmlspecialchars($category['name']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+            <input type="text" name="category" value="<?php echo htmlspecialchars($newsItem['category']); ?>" required>
             
             <label for="author">Penulis:</label>
             <input type="text" name="author" value="<?php echo htmlspecialchars($newsItem['author']); ?>" required>
