@@ -278,15 +278,15 @@ function generateSlug($title)
                 </a>
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
-                    <li><a href="berita" class="nav-link px-2 text-white">Berita</a></li>
+                    <li><a href="home" class="nav-link px-2 text-white">Home</a></li>
+                    <li><a href="#" class="nav-link px-2 text-secondary">Berita</a></li>
                     <li><a href="kategori" class="nav-link px-2 text-white">Kategori</a></li>
                     <li><a href="faq" class="nav-link px-2 text-white">FAQs</a></li>
                     <li><a href="about" class="nav-link px-2 text-white">About</a></li>
                 </ul>
 
-                <form id="search-form" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                    <input id="search-bar" type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                    <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
                 </form>
 
                 <div class="text-end">
@@ -346,6 +346,7 @@ function generateSlug($title)
             });
         }
 
+
         document.addEventListener("DOMContentLoaded", () => {
             const categoryItems = document.querySelectorAll(".category-item");
             const newsItems = document.querySelectorAll(".news-item");
@@ -368,14 +369,6 @@ function generateSlug($title)
                     item.classList.add("active");
                 });
             });
-        });
-
-        document.getElementById("search-form").addEventListener("submit", function(event) {
-            event.preventDefault();
-            const query = document.getElementById("search-bar").value;
-            if (query) {
-                window.location.href = `search.php?q=${encodeURIComponent(query)}`;
-            }
         });
     </script>
 </body>

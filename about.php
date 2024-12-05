@@ -278,15 +278,15 @@ function generateSlug($title)
                 </a>
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
+                    <li><a href="home" class="nav-link px-2 text-white">Home</a></li>
                     <li><a href="berita" class="nav-link px-2 text-white">Berita</a></li>
                     <li><a href="kategori" class="nav-link px-2 text-white">Kategori</a></li>
                     <li><a href="faq" class="nav-link px-2 text-white">FAQs</a></li>
-                    <li><a href="about" class="nav-link px-2 text-white">About</a></li>
+                    <li><a href="#" class="nav-link px-2 text-secondary">About</a></li>
                 </ul>
 
-                <form id="search-form" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                    <input id="search-bar" type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                    <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
                 </form>
 
                 <div class="text-end">
@@ -297,87 +297,11 @@ function generateSlug($title)
         </div>
     </header>
 
-    <section id="categories" class="categories">
-        <div class="container">
-            <h2>Kategori Berita</h2>
-            <div class="category-list">
-                <div class="category-item" data-category="all">Semua</div>
-                <?php foreach ($categories as $category): ?>
-                    <div class="category-item" data-category="<?= htmlspecialchars($category['name']) ?>">
-                        <?= htmlspecialchars($category['name']) ?>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
-
-
-    <section id="latest-news" class="news">
-        <div class="container">
-            <h2>Berita Terbaru</h2>
-            <div class="news-list">
-                <?php foreach ($posts as $post): ?>
-                    <?php $slug = generateSlug($post['title']); ?>
-                    <div class="news-item" data-category="<?= htmlspecialchars($post['category']) ?>">
-                        <h3>
-                            <a id="title" href="berita/<?= $slug ?>">
-                                <?= htmlspecialchars($post['title']) ?>
-                            </a>
-                        </h3>
-                        <p id="summary"><?= nl2br(htmlspecialchars($post['summary'])) ?></p>
-                        <p id="date"><?= htmlspecialchars($post['created_at']->toDateTime()->format('F j, Y')) ?></p>
-                        <p><?= htmlspecialchars($post['category']) ?></p>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
-
     <footer class="fixed-bottom">
         <div class="container">
             <p>&copy; 2024 BeritaKini. Semua Hak Dilindungi.</p>
         </div>
     </footer>
-
-    <script>
-        function scrollToSection(id) {
-            document.getElementById(id).scrollIntoView({
-                behavior: "smooth"
-            });
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const categoryItems = document.querySelectorAll(".category-item");
-            const newsItems = document.querySelectorAll(".news-item");
-
-            categoryItems.forEach((item) => {
-                item.addEventListener("click", () => {
-                    const selectedCategory = item.getAttribute("data-category");
-
-                    newsItems.forEach((news) => {
-                        const newsCategory = news.getAttribute("data-category");
-
-                        if (selectedCategory === "all" || newsCategory === selectedCategory) {
-                            news.style.display = "block";
-                        } else {
-                            news.style.display = "none";
-                        }
-                    });
-
-                    categoryItems.forEach((cat) => cat.classList.remove("active"));
-                    item.classList.add("active");
-                });
-            });
-        });
-
-        document.getElementById("search-form").addEventListener("submit", function(event) {
-            event.preventDefault();
-            const query = document.getElementById("search-bar").value;
-            if (query) {
-                window.location.href = `search.php?q=${encodeURIComponent(query)}`;
-            }
-        });
-    </script>
 </body>
 
 </html>
