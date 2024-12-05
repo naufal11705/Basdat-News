@@ -82,6 +82,12 @@ function generateSlug($title)
             padding: 32px 0;
         }
 
+        .news-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
         .news-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -143,15 +149,13 @@ function generateSlug($title)
                 </a>
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="home" class="nav-link px-2 text-white">Home</a></li>
                     <li><a href="berita" class="nav-link px-2 text-white">Berita</a></li>
-                    <li><a href="kategori" class="nav-link px-2 text-white">Kategori</a></li>
                     <li><a href="faq" class="nav-link px-2 text-white">FAQs</a></li>
                     <li><a href="about" class="nav-link px-2 text-white">About</a></li>
                 </ul>
 
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                    <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+                <form id="search-form" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                    <input id="search-bar" type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
                 </form>
 
                 <div class="text-end">
@@ -196,5 +200,15 @@ function generateSlug($title)
             <p>&copy; 2024 BeritaKini. Semua Hak Dilindungi.</p>
         </div>
     </footer>
+
+    <script>
+        document.getElementById("search-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const query = document.getElementById("search-bar").value;
+            if (query) {
+                window.location.href = `search.php?q=${encodeURIComponent(query)}`;
+            }
+        });
+    </script>
 </body>
 </html>

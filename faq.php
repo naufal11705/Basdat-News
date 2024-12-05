@@ -49,6 +49,15 @@ function generateSlug($title)
             margin: 0 auto;
         }
 
+        #container-faq {
+            margin: 20px auto;
+            max-width: 800px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
         /* Header */
         header {
             background: #333;
@@ -101,15 +110,13 @@ function generateSlug($title)
                 </a>
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="home" class="nav-link px-2 text-white">Home</a></li>
                     <li><a href="berita" class="nav-link px-2 text-white">Berita</a></li>
-                    <li><a href="kategori" class="nav-link px-2 text-white">Kategori</a></li>
                     <li><a href="#" class="nav-link px-2 text-secondary">FAQs</a></li>
                     <li><a href="about" class="nav-link px-2 text-white">About</a></li>
                 </ul>
 
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                    <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+                <form id="search-form" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                    <input id="search-bar" type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
                 </form>
 
                 <div class="text-end">
@@ -120,11 +127,72 @@ function generateSlug($title)
         </div>
     </header>
 
+    <div id="container-faq" class="container">
+    <div class="accordion" id="accordionExample">
+			<div class="accordion-item">
+				<h2 class="accordion-header">
+					<button class="accordion-button"
+						type="button" data-bs-toggle="collapse"
+						data-bs-target="#collapseOne" aria-expanded="true"
+						aria-controls="collapseOne">
+						Apa itu BeritaKini?
+					</button>
+				</h2>
+				<div id="collapseOne" class="accordion-collapse collapse"
+					data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+						<strong>BeritaKini</strong> 
+						adalah web berita yang menyediakan antarmuka yang menarik dan mudah digunakan. 
+                        Sistem ini dirancang untuk memungkinkan baik pengguna umum maupun admin untuk 
+                        dengan cepat dan efisien mengakses berita terbaru, memperbarui konten, serta 
+                        melaksanakan tugas-tugas terkait berita lainnya tanpa kesulitan yang sering 
+                        ditemui pada antarmuka grafis. Pendekatan ini tidak hanya mempermudah akses, 
+                        tetapi juga mengurangi potensi kesalahan manusia, menjaga keamanan data, dan 
+                        meningkatkan efisiensi operasional dalam pengelolaan berita.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item">
+				<h2 class="accordion-header">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+						aria-expanded="false" aria-controls="collapseTwo">
+						Arsitektur apa saja yang terdapat pada web ini?
+					</button>
+				</h2>
+				<div id="collapseTwo" class="accordion-collapse collapse"
+					data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+						<strong>
+							Php, Javascript, dan MongoDB
+						</strong> 
+						merupakan arsitektur yang digunakan untuk mengelola data 
+                        pada web BeritaKini
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+
     <footer class="fixed-bottom">
         <div class="container">
             <p>&copy; 2024 BeritaKini. Semua Hak Dilindungi.</p>
         </div>
     </footer>
+    <script src=
+        "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                integrity=
+        "sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+		crossorigin="anonymous">
+        
+        document.getElementById("search-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const query = document.getElementById("search-bar").value;
+            if (query) {
+                window.location.href = `search.php?q=${encodeURIComponent(query)}`;
+            }
+        });
+	</script>
 </body>
 
 </html>

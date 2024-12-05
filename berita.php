@@ -2,21 +2,17 @@
 require 'vendor/autoload.php';
 require 'db.php';
 
-// Koneksi ke database
 $db = getDB();
 $posts = $db->posts->find();
 
-// Fungsi untuk membuat slug dari judul
 function generateSlug($title) {
     return strtolower(preg_replace('/[^a-zA-Z0-9]+/', '-', trim($title)));
 }
 
-// Mendapatkan slug dari URL
 if (isset($_SERVER['REQUEST_URI'])) {
     $urlPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     $slug = basename($urlPath);
 
-    // Mencari berita berdasarkan slug
     foreach ($posts as $item) {
         if (generateSlug($item['title']) === $slug) {
             $post = $item;
@@ -116,6 +112,7 @@ if (isset($_SERVER['REQUEST_URI'])) {
         .news-content {
             font-size: 16px;
             line-height: 1.8;
+            margin-bottom: 20px;
         }
 
         .back-button {
@@ -148,11 +145,9 @@ if (isset($_SERVER['REQUEST_URI'])) {
                 </a>
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="home" class="nav-link px-2 text-white">Home</a></li>
-                    <li><a href="#" class="nav-link px-2 text-secondary">Berita</a></li>
-                    <li><a href="kategori" class="nav-link px-2 text-white">Kategori</a></li>
-                    <li><a href="faq" class="nav-link px-2 text-white">FAQs</a></li>
-                    <li><a href="about" class="nav-link px-2 text-white">About</a></li>
+                    <li><a href="../berita" class="nav-link px-2 text-secondary">Berita</a></li>
+                    <li><a href="../faq" class="nav-link px-2 text-white">FAQs</a></li>
+                    <li><a href="../about" class="nav-link px-2 text-white">About</a></li>
                 </ul>
 
                 <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
@@ -174,6 +169,7 @@ if (isset($_SERVER['REQUEST_URI'])) {
             <div class="news-content">
                 <?= nl2br(htmlspecialchars($post['content'])) ?>
             </div>
+            <p class="news-meta"> Author: <?= htmlspecialchars($post['author']) ?></p>
             <a href="../" class="back-button">Kembali ke Beranda</a>
         <?php else: ?>
             <h1>Berita Tidak Ditemukan</h1>

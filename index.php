@@ -18,12 +18,8 @@ switch ($path) {
         include 'dashboard.php';
         break;
 
-    case '/home':
-        include 'dashboard.php';
-        break;
-
     case '/berita':
-        include 'latest.php';
+        include 'dashboard.php';
         break;
 
     case '/about':

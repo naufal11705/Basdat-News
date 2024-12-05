@@ -49,6 +49,33 @@ function generateSlug($title)
             margin: 0 auto;
         }
 
+        #container-about {
+            margin: 20px auto;
+            max-width: 800px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .meta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
         /* Header */
         header {
             background: #333;
@@ -77,189 +104,12 @@ function generateSlug($title)
             text-decoration: underline;
         }
 
-        /* Hero Section */
-        .hero {
-            background: #007BFF;
-            color: #fff;
-            padding: 32px 0;
-            text-align: center;
-        }
-
-        .hero button {
-            padding: 8px 16px;
-            margin-top: 16px;
-            background: #0056b3;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .hero button:hover {
-            background: #003f7f;
-        }
-
-        /* Search Section */
-        .search {
-            padding: 24px 0;
-            text-align: center;
-            background-color: #f0f0f0;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .search input {
-            width: 60%;
-            padding: 13px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-right: 8px;
-        }
-
-        .search input:focus {
-            outline: none;
-            border-color: #007BFF;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-        }
-
-        .search button {
-            padding: 13px 24px;
-            font-size: 16px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .search button:hover {
-            background-color: #0056b3;
-        }
-
-        /*Kategori*/
-        .categories {
-            padding: 32px 0;
-            text-align: center;
-        }
-
-        .categories .category-list {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .categories .category-item {
-            background: #eee;
-            padding: 16px 32px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .categories .category-item:hover {
-            background: #ddd;
-        }
-
-        /* News Section */
-        .news {
-            padding: 32px 0;
-        }
-
-        .news-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 16px;
-        }
-
-        .news-item {
-            background: #fff;
-            padding: 16px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            transition: box-shadow 0.3s;
-        }
-
-        .news-item:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .news-item button {
-            background: #007BFF;
-            color: #fff;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 8px;
-        }
-
-        .news-item button:hover {
-            background: #0056b3;
-        }
-
-        /* Footer */
         footer {
             background: #000000;
             color: #fff;
             text-align: center;
             padding: 16px 0;
             font-family: Anton, sans-serif;
-        }
-
-        .login-button {
-            display: inline-block;
-            background: #007BFF;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 5px;
-            text-decoration: none;
-            margin-left: 16px;
-        }
-
-        .login-button:hover {
-            background: #0056b3;
-        }
-
-        .news-item a {
-            color: black;
-            text-decoration: none;
-        }
-
-        .news-item a:hover {
-            color: red;
-            text-decoration: none;
-        }
-
-        #title {
-            font-family: 'Segoe UI';
-            font-size: 20px;
-        }
-
-        #summary {
-            font-family: 'Segoe UI';
-            font-size: 16px;
-        }
-
-        #date {
-            font-family: 'Segoe UI';
-            font-size: 12px;
-            text-transform: uppercase;
-        }
-
-        .category-item {
-            cursor: pointer;
-            padding: 5px 10px;
-            margin: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            display: inline-block;
-        }
-
-        .category-item.active {
-            background-color: #007bff;
-            color: #fff;
-            border-color: #007bff;
         }
 
         ::-webkit-scrollbar {
@@ -278,15 +128,13 @@ function generateSlug($title)
                 </a>
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="home" class="nav-link px-2 text-white">Home</a></li>
                     <li><a href="berita" class="nav-link px-2 text-white">Berita</a></li>
-                    <li><a href="kategori" class="nav-link px-2 text-white">Kategori</a></li>
                     <li><a href="faq" class="nav-link px-2 text-white">FAQs</a></li>
                     <li><a href="#" class="nav-link px-2 text-secondary">About</a></li>
                 </ul>
 
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                    <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+                <form id="search-form" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                    <input id="search-bar" type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
                 </form>
 
                 <div class="text-end">
@@ -297,11 +145,34 @@ function generateSlug($title)
         </div>
     </header>
 
-    <footer class="fixed-bottom">
+    <div id="container-about" class="container">
+
+    <div style="position: relative; width: 100%; height: 0; padding-top: 141.4286%;
+        padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+        border-radius: 8px; will-change: transform;">
+        <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+            src="https://www.canva.com/design/DAGYYmJGFPc/EFNpyWVpxODRNpmIUYAe2w/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+        </iframe>
+    </div>
+    <a href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAGYYmJGFPc&#x2F;EFNpyWVpxODRNpmIUYAe2w&#x2F;view?utm_content=DAGYYmJGFPc&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link" target="_blank" rel="noopener"></a>
+
+    </div>
+
+    <footer class="sticky-bottom">
         <div class="container">
             <p>&copy; 2024 BeritaKini. Semua Hak Dilindungi.</p>
         </div>
     </footer>
+
+    <script>
+        document.getElementById("search-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const query = document.getElementById("search-bar").value;
+            if (query) {
+                window.location.href = `search.php?q=${encodeURIComponent(query)}`;
+            }
+        });
+    </script>
 </body>
 
 </html>

@@ -11,9 +11,7 @@ $posts = $db->posts->find(
     ]
 );
 
-$db = getDB();
-$categoryCollection = $db->categories;
-$categories = $categoryCollection->find();
+$categories = $db->posts->distinct('category');
 
 function generateSlug($title)
 {
@@ -231,20 +229,22 @@ function generateSlug($title)
             text-decoration: none;
         }
 
-        #title {
-            font-family: 'Segoe UI';
+        .news-title {
             font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
 
-        #summary {
-            font-family: 'Segoe UI';
+        .news-meta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .news-content {
             font-size: 16px;
-        }
-
-        #date {
-            font-family: 'Segoe UI';
-            font-size: 12px;
-            text-transform: uppercase;
+            line-height: 1.8;
+            margin-bottom: 20px;
         }
 
         .category-item {
@@ -257,9 +257,9 @@ function generateSlug($title)
         }
 
         .category-item.active {
-            background-color: #007bff;
+            background-color: #000000;
             color: #fff;
-            border-color: #007bff;
+            border-color: #000000;
         }
 
         ::-webkit-scrollbar {
@@ -278,9 +278,7 @@ function generateSlug($title)
                 </a>
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
-                    <li><a href="berita" class="nav-link px-2 text-white">Berita</a></li>
-                    <li><a href="kategori" class="nav-link px-2 text-white">Kategori</a></li>
+                    <li><a href="#" class="nav-link px-2 text-secondary">Berita</a></li>
                     <li><a href="faq" class="nav-link px-2 text-white">FAQs</a></li>
                     <li><a href="about" class="nav-link px-2 text-white">About</a></li>
                 </ul>
@@ -303,10 +301,11 @@ function generateSlug($title)
             <div class="category-list">
                 <div class="category-item" data-category="all">Semua</div>
                 <?php foreach ($categories as $category): ?>
-                    <div class="category-item" data-category="<?= htmlspecialchars($category['name']) ?>">
-                        <?= htmlspecialchars($category['name']) ?>
+                    <div class="category-item" data-category="<?= htmlspecialchars($category) ?>">
+                        <?= htmlspecialchars($category) ?>
                     </div>
                 <?php endforeach; ?>
+                
             </div>
         </div>
     </section>
@@ -320,13 +319,12 @@ function generateSlug($title)
                     <?php $slug = generateSlug($post['title']); ?>
                     <div class="news-item" data-category="<?= htmlspecialchars($post['category']) ?>">
                         <h3>
-                            <a id="title" href="berita/<?= $slug ?>">
+                            <a class="news-title id="title" href="berita/<?= $slug ?>">
                                 <?= htmlspecialchars($post['title']) ?>
                             </a>
                         </h3>
-                        <p id="summary"><?= nl2br(htmlspecialchars($post['summary'])) ?></p>
-                        <p id="date"><?= htmlspecialchars($post['created_at']->toDateTime()->format('F j, Y')) ?></p>
-                        <p><?= htmlspecialchars($post['category']) ?></p>
+                        <p class="news-content id="summary"><?= nl2br(htmlspecialchars($post['summary'])) ?></p>
+                        <p class="news-meta"><?= htmlspecialchars($post['created_at']->toDateTime()->format('F j, Y')) ?> - <?= htmlspecialchars($post['category']) ?></p>
                     </div>
                 <?php endforeach; ?>
             </div>
