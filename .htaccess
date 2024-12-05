@@ -1,4 +1,7 @@
 RewriteEngine On
 RewriteBase /news_app/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
 
 RewriteRule ^berita/([a-zA-Z0-9-]+)/?$ berita.php?slug=$1 [L,QSA]

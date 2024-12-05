@@ -1,30 +1,74 @@
 <?php
-require 'db.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-$db = getDB();
-$posts = $db->posts->find();
+$request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$base_path = '/news_app'; // Sesuaikan dengan base path aplikasi Anda
+$path = str_replace($base_path, '', $request_uri); // Hilangkan base path dari URL
+$segments = explode('/', $path);
+$id = isset($segments[2]) ? $segments[2] : null;
+
+if (!empty($_SESSION['role'])) {
+    require 'fungsi/pesan_kilat.php';
+
+    switch ($path) {
+        case '/':
+            include 'dashboard.php';
+            break;
+        
+        case '/berita/'. $id:
+            include 'berita.php';
+            break;
+
+        case '/dashboard':
+            include 'admin/dashboardAdmin.php';
+            break;
+
+        case '/tambahBerita':
+            include 'admin/tambahBerita.php';
+            break;
+
+        case '/edit':
+            $id = $_GET['id'] ?? null;
+            if ($id) {
+                include 'admin/edit.php';
+            }
+            break;
+
+        case '/hapus':
+            $id = $_GET['id'] ?? null;
+            if ($id) {
+                include 'admin/hapus.php';
+            }
+            break;
+
+        default:
+            header("HTTP/1.0 404 Not Found");
+            echo "404 Not Found - Path: " . $path;
+            break;
+    }
+
+} else {
+    require 'fungsi/pesan_kilat.php';
+
+    switch ($path) {
+        case '/':
+            include 'dashboard.php';
+            break;
+
+        case '/login':
+            include 'login.php';
+            break;
+
+        case '/berita/'. $id:
+            include 'berita.php';
+            break;
+
+        default:
+            header("HTTP/1.0 404 Not Found");
+            echo "404 Not Found - Path: " . $path;
+            break;
+    }
+}
 ?>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Postingan Blog</title>
-</head>
-<body>
-    <h1>Daftar Postingan Blog</h1>
-    <a href="create.php">Buat Postingan Baru</a>
-    <hr>
-    <?php foreach($posts as $post): ?>
-        <div class="post">
-            <h2><?= htmlspecialchars($post['title']) ?></h2>
-            <p>
-                <?= nl2br(htmlspecialchars($post['content'])) ?>
-            </p>
-            <a href="edit.php?id=<?= $post['_id'] ?>">Edit</a>
-            <a href="delete.php?id=<?= $post['_id'] ?>">Delete</a>
-        </div>
-        <hr>
-    <?php endforeach; ?>
-</body>
-</html>

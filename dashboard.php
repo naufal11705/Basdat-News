@@ -267,7 +267,7 @@ function generateSlug($title)
                 <a href="#latest-news">Berita Terbaru</a>
                 <a href="#categories">Kategori</a>
                 <a href="#about">Tentang Kami</a>
-                <a href="login.php" class="login-button">Login</a>
+                <a href="login" class="login-button">Login</a>
             </nav>
         </div>
     </header>

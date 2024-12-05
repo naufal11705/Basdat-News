@@ -91,14 +91,17 @@
     <div class="login-container">
         <h1>Login</h1>
         
-        <?php if (isset($error_message)): ?>
-            <div class="error-message"><?php echo $error_message; ?></div>
-        <?php endif; ?>
+        <?php if (isset($_SESSION['_flashdata'])) {
+            foreach ($_SESSION['_flashdata'] as $key => $val) {
+            echo get_flashdata($key);
+            }
+        }
+        ?>
 
-        <form action="" method="POST">
+        <form action="cek_login.php" method="post">
             <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required placeholder="Enter your email">
+                <label for="username">Username</label>
+                <input type="username" id="username" name="username" required placeholder="Enter your username">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
@@ -112,5 +115,7 @@
             <p>Belum punya akun? <a href="register.php">Daftar Sekarang</a></p>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.3.3/dist/umd/popper.min.js"></script>
 </body>
 </html>

@@ -1,10 +1,14 @@
 <?php
-require '../db.php'; 
+require 'db.php'; 
+
+$db = getDB();
+$categoryCollection = $db->categories;
+$categories = $categoryCollection->find();
 
 if (isset($_GET['id'])) {
     $newsId = $_GET['id'];
     $db = getDB();
-    $collection = $db->news; 
+    $collection = $db->posts; 
 
     $newsItem = $collection->findOne(['_id' => new MongoDB\BSON\ObjectId($newsId)]);
 
@@ -24,7 +28,7 @@ if (isset($_GET['id'])) {
 
         $collection->updateOne(['_id' => new MongoDB\BSON\ObjectId($newsId)], ['$set' => $updatedData]);
 
-        header("Location: dashboardAdmin.php");
+        header("Location: dashboard");
         exit;
     }
 } else {
@@ -37,7 +41,7 @@ if (isset($_GET['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin/style.css">
     <title>Edit Berita</title>
 </head>
 <body>
@@ -54,7 +58,15 @@ if (isset($_GET['id'])) {
             <textarea name="summary" required><?php echo htmlspecialchars($newsItem['summary']); ?></textarea>
             
             <label for="category">Kategori:</label>
-            <input type="text" name="category" value="<?php echo htmlspecialchars($newsItem['category']); ?>" required>
+            <select name="category" id="category" required>
+                <option value="">Pilih Kategori</option>
+                <?php foreach ($categories as $category): ?>
+                    <option value="<?= htmlspecialchars($category['name']) ?>"
+                        <?php echo ($newsItem['category'] == $category['name']) ? 'selected' : ''; ?>>
+                        <?= htmlspecialchars($category['name']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
             
             <label for="author">Penulis:</label>
             <input type="text" name="author" value="<?php echo htmlspecialchars($newsItem['author']); ?>" required>

@@ -1,15 +1,15 @@
 <?php
-require '../db.php'; 
+require 'db.php'; 
 
 if (isset($_GET['id'])) {
     $newsId = $_GET['id'];
     $db = getDB(); 
-    $collection = $db->news; 
+    $collection = $db->posts; 
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $collection->deleteOne(['_id' => new MongoDB\BSON\ObjectId($newsId)]);
 
-        header("Location: dashboardAdmin.php");
+        header("Location: dashboard");
         exit;
     }
 
@@ -27,7 +27,7 @@ if (isset($_GET['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin/style.css">
     <title>Hapus Berita</title>
 </head>
 <body>
@@ -36,7 +36,7 @@ if (isset($_GET['id'])) {
         <p>Apakah Anda yakin ingin menghapus berita ini?</p>
         <form method="POST">
             <button type="submit" class="btn delete">Ya, Hapus</button>
-            <a href="dashboardAdmin.php" class="btn">Batal</a>
+            <a href="dashboard" class="btn">Batal</a>
         </form>
     </div>
 </body>
