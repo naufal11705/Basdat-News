@@ -336,8 +336,6 @@ function generateSlug($title)
                 behavior: "smooth"
             });
         }
-
-
         document.addEventListener("DOMContentLoaded", () => {
             const categoryItems = document.querySelectorAll(".category-item");
             const newsItems = document.querySelectorAll(".news-item");
