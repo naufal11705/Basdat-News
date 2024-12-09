@@ -9,7 +9,6 @@ $path = str_replace($base_path, '', $request_uri); // Hilangkan base path dari U
 $segments = explode('/', $path);
 $id = isset($segments[2]) ? $segments[2] : null;
 
-
 switch ($path) {
     case '/login':
         include 'login.php';
@@ -17,6 +16,22 @@ switch ($path) {
 
     case '/':
         include 'dashboard.php';
+        break;
+
+    case '/berita':
+        include 'dashboard.php';
+        break;
+
+    case '/about':
+        include 'about.php';
+        break;
+
+    case '/faq':
+        include 'faq.php';
+        break;
+
+    case '/kategori':
+        include 'kategori.php';
         break;
     
     case '/berita/'. $id:

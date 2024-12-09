@@ -11,9 +11,7 @@ $posts = $db->posts->find(
     ]
 );
 
-$db = getDB();
-$categoryCollection = $db->categories;
-$categories = $categoryCollection->find();
+$categories = $db->posts->distinct('category');
 
 function generateSlug($title)
 {
@@ -27,13 +25,15 @@ function generateSlug($title)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <title>BeritaKini</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         /* Style Global*/
         body {
-            font-family: Arial, sans-serif;
+            font-family: Roboto, sans-serif;
             margin: 0;
             padding: 0;
             line-height: 1.6;
@@ -52,6 +52,7 @@ function generateSlug($title)
             background: #333;
             color: #fff;
             padding: 16px 0;
+            font-family: Anton;
         }
 
         header h1 {
@@ -197,10 +198,11 @@ function generateSlug($title)
 
         /* Footer */
         footer {
-            background: #333;
+            background: #000000;
             color: #fff;
             text-align: center;
             padding: 16px 0;
+            font-family: Anton, sans-serif;
         }
 
         .login-button {
@@ -227,20 +229,22 @@ function generateSlug($title)
             text-decoration: none;
         }
 
-        #title {
-            font-family: 'Segoe UI';
+        .news-title {
             font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
 
-        #summary {
-            font-family: 'Segoe UI';
+        .news-meta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .news-content {
             font-size: 16px;
-        }
-
-        #date {
-            font-family: 'Segoe UI';
-            font-size: 12px;
-            text-transform: uppercase;
+            line-height: 1.8;
+            margin-bottom: 20px;
         }
 
         .category-item {
@@ -253,40 +257,43 @@ function generateSlug($title)
         }
 
         .category-item.active {
-            background-color: #007bff;
+            background-color: #000000;
             color: #fff;
-            border-color: #007bff;
+            border-color: #000000;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
         }
     </style>
 </head>
 
 <body>
-    <header>
+
+    <header class="p-3 bg-dark text-white">
         <div class="container">
-            <h1>BeritaKini</h1>
-            <nav>
-                <a href="#latest-news">Berita Terbaru</a>
-                <a href="#categories">Kategori</a>
-                <a href="#about">Tentang Kami</a>
-                <a href="login" class="login-button">Login</a>
-            </nav>
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <img src="img/BeritaKini.png" alt="BeritaKini Logo" width="70" height="48" class="me-3">
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="#" class="nav-link px-2 text-secondary">Berita</a></li>
+                    <li><a href="faq" class="nav-link px-2 text-white">FAQs</a></li>
+                    <li><a href="about" class="nav-link px-2 text-white">About</a></li>
+                </ul>
+
+                <form id="search-form" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                    <input id="search-bar" type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+                </form>
+
+                <div class="text-end">
+                    <a href="login" class="btn btn-outline-light me-2">Login</a>
+                </div>
+                
+            </div>
         </div>
     </header>
-
-    <section class="hero">
-        <div class="container">
-            <h2>Berita Terkini dan Terpercaya</h2>
-            <p>Dapatkan informasi terkini dari berbagai kategori, mulai dari politik, teknologi, olahraga, dan lainnya.</p>
-            <button onclick="scrollToSection('latest-news')">Lihat Berita Terbaru</button>
-        </div>
-    </section>
-
-    <section class="search">
-        <div class="container">
-            <input type="text" id="search-bar" placeholder="Cari berita...">
-            <button onclick="searchNews()">Cari</button>
-        </div>
-    </section>
 
     <section id="categories" class="categories">
         <div class="container">
@@ -294,10 +301,11 @@ function generateSlug($title)
             <div class="category-list">
                 <div class="category-item" data-category="all">Semua</div>
                 <?php foreach ($categories as $category): ?>
-                    <div class="category-item" data-category="<?= htmlspecialchars($category['name']) ?>">
-                        <?= htmlspecialchars($category['name']) ?>
+                    <div class="category-item" data-category="<?= htmlspecialchars($category) ?>">
+                        <?= htmlspecialchars($category) ?>
                     </div>
                 <?php endforeach; ?>
+                
             </div>
         </div>
     </section>
@@ -311,20 +319,19 @@ function generateSlug($title)
                     <?php $slug = generateSlug($post['title']); ?>
                     <div class="news-item" data-category="<?= htmlspecialchars($post['category']) ?>">
                         <h3>
-                            <a id="title" href="berita/<?= $slug ?>">
+                            <a class="news-title id="title" href="berita/<?= $slug ?>">
                                 <?= htmlspecialchars($post['title']) ?>
                             </a>
                         </h3>
-                        <p id="summary"><?= nl2br(htmlspecialchars($post['summary'])) ?></p>
-                        <p id="date"><?= htmlspecialchars($post['created_at']->toDateTime()->format('F j, Y')) ?></p>
-                        <p><?= htmlspecialchars($post['category']) ?></p>
+                        <p class="news-content id="summary"><?= nl2br(htmlspecialchars($post['summary'])) ?></p>
+                        <p class="news-meta"><?= htmlspecialchars($post['created_at']->toDateTime()->format('F j, Y')) ?> - <?= htmlspecialchars($post['category']) ?></p>
                     </div>
                 <?php endforeach; ?>
             </div>
         </div>
     </section>
 
-    <footer>
+    <footer class="fixed-bottom">
         <div class="container">
             <p>&copy; 2024 BeritaKini. Semua Hak Dilindungi.</p>
         </div>
@@ -336,6 +343,8 @@ function generateSlug($title)
                 behavior: "smooth"
             });
         }
+
+
         document.addEventListener("DOMContentLoaded", () => {
             const categoryItems = document.querySelectorAll(".category-item");
             const newsItems = document.querySelectorAll(".news-item");
@@ -358,6 +367,14 @@ function generateSlug($title)
                     item.classList.add("active");
                 });
             });
+        });
+
+        document.getElementById("search-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const query = document.getElementById("search-bar").value;
+            if (query) {
+                window.location.href = `search.php?q=${encodeURIComponent(query)}`;
+            }
         });
     </script>
 </body>
