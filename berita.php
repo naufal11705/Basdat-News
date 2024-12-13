@@ -18,7 +18,7 @@ if (isset($_SERVER['REQUEST_URI'])) {
             $post = $item;
             break;
         }
-    }
+    }   
 }
 ?>
 
@@ -35,7 +35,6 @@ if (isset($_SERVER['REQUEST_URI'])) {
     <title><?= isset($post) ? htmlspecialchars($post['title']) : 'Berita Tidak Ditemukan' ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Style Global*/
         body {
             font-family: Roboto, sans-serif;
             margin: 0;
@@ -60,7 +59,6 @@ if (isset($_SERVER['REQUEST_URI'])) {
             padding: 20px;
         }
 
-        /* Header */
         header {
             background: #333;
             color: #fff;
@@ -88,7 +86,6 @@ if (isset($_SERVER['REQUEST_URI'])) {
             text-decoration: underline;
         }
 
-        /* Footer */
         footer {
             background: #000000;
             color: #fff;
@@ -132,6 +129,14 @@ if (isset($_SERVER['REQUEST_URI'])) {
         ::-webkit-scrollbar {
             display: none;
         }
+
+        .image {
+            width: 100%;
+            height: auto; 
+            object-fit: cover;
+            max-height: 300px;
+            margin-bottom: 20px; 
+        }
     </style>
 </head>
 
@@ -164,6 +169,7 @@ if (isset($_SERVER['REQUEST_URI'])) {
 
     <div id="container-berita" class="container">
         <?php if (isset($post)): ?>
+            <img src="<?='../' . htmlspecialchars($post['image']) ?>" alt="Image" class="image">
             <h1 class="news-title"><?= htmlspecialchars($post['title']) ?></h1>
             <p class="news-meta"><?= htmlspecialchars($post['created_at']->toDateTime()->format('F j, Y')) ?> - <?= htmlspecialchars($post['category']) ?></p>
             <div class="news-content">
