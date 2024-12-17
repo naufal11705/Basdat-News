@@ -1,3 +1,16 @@
+<?php
+session_start(); // Mulai sesi untuk menampilkan pesan error jika ada
+
+// Cek jika ada pesan error dari login.php
+$error_message = $_SESSION['error'] ?? null;
+if ($error_message) {
+    // Tampilkan pesan error dengan alert di JavaScript
+    echo "<script>alert('$error_message');</script>";
+    // Hapus pesan error setelah ditampilkan
+    unset($_SESSION['error']);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
