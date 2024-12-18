@@ -17,16 +17,26 @@ if (isset($_GET['id'])) {
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $updatedData = [
-            'title' => $_POST['title'],
-            'content' => $_POST['content'],
-            'summary' => $_POST['summary'],
-            'category' => $_POST['category'],
-            'author' => $_POST['author'],
-            'date_published' => new MongoDB\BSON\UTCDateTime() 
-        ];
 
-        $collection->updateOne(['_id' => new MongoDB\BSON\ObjectId($newsId)], ['$set' => $updatedData]);
+        if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
+            $fileTmpPath = $_FILES['image']['tmp_name'];
+            $fileName = uniqid() . "_" . $_FILES['image']['name'];
+            $filePath = 'uploads/' . basename($fileName);
+
+            move_uploaded_file($fileTmpPath, $filePath);
+
+            $updatedData = [
+                'title' => $_POST['title'],
+                'content' => $_POST['content'],
+                'summary' => $_POST['summary'],
+                'category' => $_POST['category'],
+                'author' => $_POST['author'],
+                'image' => $filePath,
+                'updated_at' => new MongoDB\BSON\UTCDateTime(),
+            ];
+    
+            $collection->updateOne(['_id' => new MongoDB\BSON\ObjectId($newsId)], ['$set' => $updatedData]);
+        }
 
         header("Location: dashboard");
         exit;
@@ -47,7 +57,7 @@ if (isset($_GET['id'])) {
 <body>
     <div class="container">
         <h1>Edit Berita</h1>
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             <label for="title">Judul:</label>
             <input type="text" name="title" value="<?php echo htmlspecialchars($newsItem['title']); ?>" required>
             
@@ -62,6 +72,9 @@ if (isset($_GET['id'])) {
             
             <label for="author">Penulis:</label>
             <input type="text" name="author" value="<?php echo htmlspecialchars($newsItem['author']); ?>" required>
+
+            <label for="image">Foto:</label>
+            <input type="file" name="image" required>
             
             <button type="submit">Update Berita</button>
         </form>

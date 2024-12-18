@@ -16,8 +16,6 @@ $posts = $db->posts->find($searchCriteria, [
     'sort' => ['created_at' => -1],
 ]);
 
-$categories = $db->categories->find();
-
 function generateSlug($title)
 {
     return strtolower(preg_replace('/[^a-zA-Z0-9]+/', '-', trim($title)));
@@ -137,6 +135,14 @@ function generateSlug($title)
             color: red;
             text-decoration: none;
         }
+
+        .image {
+            width: 100%;
+            height: auto; 
+            object-fit: cover;
+            max-height: 300px;
+            margin-bottom: 20px; 
+        }
     </style>
 </head>
 <body>
@@ -185,6 +191,7 @@ function generateSlug($title)
                                     <?= htmlspecialchars($post['title']) ?>
                                 </a>
                             </h3>
+                            <img src="<?=htmlspecialchars($post['image']) ?>" alt="Image" class="image">
                             <p id="summary"><?= nl2br(htmlspecialchars($post['summary'])) ?></p>
                             <p id="date"><?= htmlspecialchars($post['created_at']->toDateTime()->format('F j, Y')) ?></p>
                             <p><?= htmlspecialchars($post['category']) ?></p>

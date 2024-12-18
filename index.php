@@ -4,8 +4,8 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$base_path = '/Basdat-News'; // Sesuaikan dengan base path aplikasi Anda
-$path = str_replace($base_path, '', $request_uri); // Hilangkan base path dari URL
+$base_path = '/Basdat-News';
+$path = str_replace($base_path, '', $request_uri);
 $segments = explode('/', $path);
 $id = isset($segments[2]) ? $segments[2] : null;
 

@@ -265,6 +265,14 @@ function generateSlug($title)
         ::-webkit-scrollbar {
             display: none;
         }
+
+        .image {
+            width: 100%;
+            height: auto; 
+            object-fit: cover;
+            max-height: 200px;
+            margin-bottom: 20px; 
+        }
     </style>
 </head>
 
@@ -323,6 +331,7 @@ function generateSlug($title)
                                 <?= htmlspecialchars($post['title']) ?>
                             </a>
                         </h3>
+                        <img src="<?=htmlspecialchars($post['image']) ?>" alt="Image" class="image">
                         <p class="news-content id="summary"><?= nl2br(htmlspecialchars($post['summary'])) ?></p>
                         <p class="news-meta"><?= htmlspecialchars($post['created_at']->toDateTime()->format('F j, Y')) ?> - <?= htmlspecialchars($post['category']) ?></p>
                     </div>
