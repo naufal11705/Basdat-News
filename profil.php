@@ -255,7 +255,7 @@
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                 <a href="" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                    <img src="../img/BeritaKini.png" alt="BeritaKini Logo" width="70" height="48" class="me-3">
+                    <img src="img/BeritaKini.png" alt="BeritaKini Logo" width="70" height="48" class="me-3">
                 </a>
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
@@ -278,21 +278,16 @@
 
 
     <section id="admin-profile" class="container">
-    <h2>Profil Admin</h2>
+    <h2>Profil Pengguna</h2>
     <form method="POST" action="update_profile.php">
         <div class="mb-3">
             <label for="username" class="form-label">Nama Pengguna</label>
-            <input type="text" class="form-control" id="username" name="username" required>
+            <input type="text" class="form-control" id="username" name="username" value="<?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : ''; ?>" readonly>
         </div>
         <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required>
+            <label for="email" class="form-label">Role</label>
+            <input type="text" class="form-control" id="username" name="username" value="<?php echo isset($_SESSION['role']) ? htmlspecialchars($_SESSION['role']) : ''; ?>" readonly>
         </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Kata Sandi</label>
-            <input type="password" class="form-control" id="password" name="password">
-        </div>
-        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
     </form>
 </section>
 

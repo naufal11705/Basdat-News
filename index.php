@@ -64,6 +64,13 @@ switch ($path) {
         }
         break;
 
+    case '/profil':
+        $id = $_GET['id'] ?? null;
+        if (isset($_SESSION['username'])) {
+            require_once 'profil.php';
+        }
+        break;
+
     default:
         header("HTTP/1.0 404 Not Found");
         echo "404 Not Found - Path: " . $path;
