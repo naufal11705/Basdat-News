@@ -14,6 +14,10 @@ switch ($path) {
         require_once 'login.php';
         break;
 
+    case '/register':
+        require_once 'register.php';
+        break;
+
     case '/':
         require_once 'dashboard.php';
         break;

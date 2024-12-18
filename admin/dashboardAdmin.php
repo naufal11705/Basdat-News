@@ -10,6 +10,7 @@
     <div class="container">
         <h1>Dashboard Admin</h1>
         <a href="tambahBerita" class="btn">Tambah Berita</a>
+        <a href="register" class="btn">Tambah User</a>
         
         <h2>Daftar Berita</h2>
         <table>
