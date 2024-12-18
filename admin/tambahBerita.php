@@ -2,23 +2,39 @@
 require 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $db = getDB(); 
-    $collection = $db->posts; 
+    $db = getDB();
+    $collection = $db->posts;
 
-    $newNews = [
-        'title' => $_POST['title'],
-        'content' => $_POST['content'],
-        'summary' => $_POST['summary'],
-        'category' => $_POST['category'],
-        'author' => $_POST['author'],
-        'created_at' => new MongoDB\BSON\UTCDateTime(),
-        'updated_at' => new MongoDB\BSON\UTCDateTime(),
-    ];
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $insertResult = $collection->insertOne($newNews);
+        if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
+            $fileTmpPath = $_FILES['image']['tmp_name'];
+            $fileName = uniqid() . "_" . $_FILES['image']['name'];
+            $filePath = 'uploads/' . basename($fileName); 
 
-    header("Location: dashboard");
-    exit();
+            move_uploaded_file($fileTmpPath, $filePath);
+
+            $newNews = [
+                'title' => $_POST['title'],
+                'content' => $_POST['content'],
+                'summary' => $_POST['summary'],
+                'category' => $_POST['category'],
+                'author' => $_POST['author'],
+                'image' => $filePath,
+                'created_at' => new MongoDB\BSON\UTCDateTime(),
+                'updated_at' => new MongoDB\BSON\UTCDateTime(),
+            ];
+        
+            $insertResult = $collection->insertOne($newNews);
+        }
+    
+        header("Location: dashboard");
+        exit();
+
+    } else {
+        echo "No file submitted.";
+    }
+
 }
 ?>
 
@@ -35,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="container">
         <h1>Tambah Berita</h1>
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             <label for="title">Judul:</label>
             <input type="text" name="title" required>
 
@@ -50,6 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <label for="author">Penulis:</label>
             <input type="text" name="author" required>
+
+            <label for="image">Foto:</label>
+            <input type="file" name="image" required>
 
             <button type="submit">Simpan Berita</button>
         </form>

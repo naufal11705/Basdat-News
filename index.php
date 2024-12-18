@@ -4,59 +4,70 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$base_path = '/Basdat-News'; // Sesuaikan dengan base path aplikasi Anda
-$path = str_replace($base_path, '', $request_uri); // Hilangkan base path dari URL
+$base_path = '/Basdat-News';
+$path = str_replace($base_path, '', $request_uri);
 $segments = explode('/', $path);
 $id = isset($segments[2]) ? $segments[2] : null;
 
 switch ($path) {
     case '/login':
-        include 'login.php';
+        require_once 'login.php';
+        break;
+
+    case '/register':
+        require_once 'register.php';
         break;
 
     case '/':
-        include 'dashboard.php';
+        require_once 'dashboard.php';
         break;
 
     case '/berita':
-        include 'dashboard.php';
+        require_once 'dashboard.php';
         break;
 
     case '/about':
-        include 'about.php';
+        require_once 'about.php';
         break;
 
     case '/faq':
-        include 'faq.php';
+        require_once 'faq.php';
         break;
 
     case '/kategori':
-        include 'kategori.php';
+        require_once 'kategori.php';
         break;
     
     case '/berita/'. $id:
-        include 'berita.php';
+        require_once 'berita.php';
         break;
 
     case '/dashboard':
-        include 'admin/dashboardAdmin.php';
+        require_once 'admin/dashboardAdmin.php';
         break;
 
     case '/tambahBerita':
-        include 'admin/tambahBerita.php';
+        require_once 'admin/tambahBerita.php';
         break;
 
     case '/edit':
         $id = $_GET['id'] ?? null;
         if ($id) {
-            include 'admin/edit.php';
+            require_once 'admin/edit.php';
         }
         break;
 
     case '/hapus':
         $id = $_GET['id'] ?? null;
         if ($id) {
-            include 'admin/hapus.php';
+            require_once 'admin/hapus.php';
+        }
+        break;
+
+    case '/profil':
+        $id = $_GET['id'] ?? null;
+        if (isset($_SESSION['username'])) {
+            require_once 'profil.php';
         }
         break;
 

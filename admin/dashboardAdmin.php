@@ -10,6 +10,7 @@
     <div class="container">
         <h1>Dashboard Admin</h1>
         <a href="tambahBerita" class="btn">Tambah Berita</a>
+        <a href="register" class="btn">Tambah User</a>
         
         <h2>Daftar Berita</h2>
         <table>
@@ -19,6 +20,7 @@
                     <th>Tanggal Publish</th>
                     <th>Kategori</th>
                     <th>Penulis</th>
+                    <th>Foto</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -36,6 +38,7 @@
                     echo "<td>" . $news['created_at']->toDateTime()->format('Y-m-d H:i:s') . "</td>";
                     echo "<td>" . htmlspecialchars($news['category']) . "</td>";
                     echo "<td>" . htmlspecialchars($news['author']) . "</td>";
+                    echo "<td><img src='" . htmlspecialchars($news['image']) . "' alt='Image' style='max-width:100px; height:auto;'></td>";
                     echo "<td>
                             <a href='edit?id=" . $news['_id'] . "' class='btn'>Edit</a>
                             <a href='hapus?id=" . $news['_id'] . "' class='btn delete'>Hapus</a>

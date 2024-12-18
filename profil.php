@@ -1,24 +1,5 @@
 <!DOCTYPE html>
 
-<?php
-require 'db.php';
-
-$db = getDB();
-$posts = $db->posts->find(
-    [],
-    [
-        'sort' => ['created_at' => -1],
-    ]
-);
-
-$categories = $db->posts->distinct('category');
-
-function generateSlug($title)
-{
-    return strtolower(preg_replace('/[^a-zA-Z0-9]+/', '-', trim($title)));
-}
-?>
-
 <html lang="en">
 
 <head>
@@ -265,14 +246,6 @@ function generateSlug($title)
         ::-webkit-scrollbar {
             display: none;
         }
-
-        .image {
-            width: 100%;
-            height: auto; 
-            object-fit: cover;
-            max-height: 200px;
-            margin-bottom: 20px; 
-        }
     </style>
 </head>
 
@@ -303,42 +276,21 @@ function generateSlug($title)
         </div>
     </header>
 
-    <section id="categories" class="categories">
-        <div class="container">
-            <h2>Kategori Berita</h2>
-            <div class="category-list">
-                <div class="category-item" data-category="all">Semua</div>
-                <?php foreach ($categories as $category): ?>
-                    <div class="category-item" data-category="<?= htmlspecialchars($category) ?>">
-                        <?= htmlspecialchars($category) ?>
-                    </div>
-                <?php endforeach; ?>
-                
-            </div>
-        </div>
-    </section>
 
-
-    <section id="latest-news" class="news">
-        <div class="container">
-            <h2>Berita Terbaru</h2>
-            <div class="news-list">
-                <?php foreach ($posts as $post): ?>
-                    <?php $slug = generateSlug($post['title']); ?>
-                    <div class="news-item" data-category="<?= htmlspecialchars($post['category']) ?>">
-                        <h3>
-                            <a class="news-title id="title" href="berita/<?= $slug ?>">
-                                <?= htmlspecialchars($post['title']) ?>
-                            </a>
-                        </h3>
-                        <img src="<?=htmlspecialchars($post['image']) ?>" alt="Image" class="image">
-                        <p class="news-content id="summary"><?= nl2br(htmlspecialchars($post['summary'])) ?></p>
-                        <p class="news-meta"><?= htmlspecialchars($post['created_at']->toDateTime()->format('F j, Y')) ?> - <?= htmlspecialchars($post['category']) ?></p>
-                    </div>
-                <?php endforeach; ?>
-            </div>
+    <section id="admin-profile" class="container">
+    <h2>Profil Pengguna</h2>
+    <form method="POST" action="update_profile.php">
+        <div class="mb-3">
+            <label for="username" class="form-label">Nama Pengguna</label>
+            <input type="text" class="form-control" id="username" name="username" value="<?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : ''; ?>" readonly>
         </div>
-    </section>
+        <div class="mb-3">
+            <label for="email" class="form-label">Role</label>
+            <input type="text" class="form-control" id="username" name="username" value="<?php echo isset($_SESSION['role']) ? htmlspecialchars($_SESSION['role']) : ''; ?>" readonly>
+        </div>
+    </form>
+</section>
+
 
     <footer class="fixed-bottom">
         <div class="container">
@@ -352,7 +304,6 @@ function generateSlug($title)
                 behavior: "smooth"
             });
         }
-
 
         document.addEventListener("DOMContentLoaded", () => {
             const categoryItems = document.querySelectorAll(".category-item");

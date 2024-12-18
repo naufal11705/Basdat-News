@@ -4,8 +4,10 @@ require 'db.php';
 
 $db = getDB();
 $posts = $db->posts->find();
+$commentsCollection = $db->comments;
 
-function generateSlug($title) {
+function generateSlug($title)
+{
     return strtolower(preg_replace('/[^a-zA-Z0-9]+/', '-', trim($title)));
 }
 
@@ -20,6 +22,24 @@ if (isset($_SERVER['REQUEST_URI'])) {
         }
     }
 }
+
+// Menangani pengiriman komentar
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
+    $name = $_SESSION['username'];
+    $comment = htmlspecialchars($_POST['comment']);
+
+    if (!empty($name) && !empty($comment)) {
+        $commentsCollection->insertOne([
+            'post_id' => $post['_id'],
+            'name' => $name,
+            'comment' => $comment,
+            'created_at' => new MongoDB\BSON\UTCDateTime()
+        ]);
+    }
+}
+
+// Mengambil komentar untuk post ini
+$comments = $commentsCollection->find(['post_id' => $post['_id']]);
 ?>
 
 <!DOCTYPE html>
@@ -35,7 +55,6 @@ if (isset($_SERVER['REQUEST_URI'])) {
     <title><?= isset($post) ? htmlspecialchars($post['title']) : 'Berita Tidak Ditemukan' ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Style Global*/
         body {
             font-family: Roboto, sans-serif;
             margin: 0;
@@ -60,7 +79,6 @@ if (isset($_SERVER['REQUEST_URI'])) {
             padding: 20px;
         }
 
-        /* Header */
         header {
             background: #333;
             color: #fff;
@@ -88,7 +106,6 @@ if (isset($_SERVER['REQUEST_URI'])) {
             text-decoration: underline;
         }
 
-        /* Footer */
         footer {
             background: #000000;
             color: #fff;
@@ -132,6 +149,76 @@ if (isset($_SERVER['REQUEST_URI'])) {
         ::-webkit-scrollbar {
             display: none;
         }
+
+        .image {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            max-height: 300px;
+            margin-bottom: 20px;
+        }
+
+        .comment {
+            background-color: #f8f8f8;
+            border-left: 5px solid #007bff;
+            /* Add a left border to match the header theme */
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            /* Smaller text size for comments */
+        }
+
+        .comment strong {
+            color: #007bff;
+            font-size: 1.1em;
+        }
+
+        .comment small {
+            display: block;
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .comment p {
+            margin: 10px 0 0;
+        }
+
+        .form-control {
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            border-radius: 5px;
+        }
+
+        .comments-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* Ensure comment form has the same width as the article content */
+        .comment-form {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .comment-form textarea {
+            resize: vertical;
+        }
+
+        .comment-form .form-label {
+            font-size: 14px;
+        }
+
+        .comment-form .form-control {
+            font-size: 14px;
+        }
+
+        .comment-form button {
+            font-size: 14px;
+        }
     </style>
 </head>
 
@@ -157,13 +244,14 @@ if (isset($_SERVER['REQUEST_URI'])) {
                 <div class="text-end">
                     <a href="login" class="btn btn-outline-light me-2">Login</a>
                 </div>
-                
+
             </div>
         </div>
     </header>
 
     <div id="container-berita" class="container">
         <?php if (isset($post)): ?>
+            <img src="<?= '../' . htmlspecialchars($post['image']) ?>" alt="Image" class="image">
             <h1 class="news-title"><?= htmlspecialchars($post['title']) ?></h1>
             <p class="news-meta"><?= htmlspecialchars($post['created_at']->toDateTime()->format('F j, Y')) ?> - <?= htmlspecialchars($post['category']) ?></p>
             <div class="news-content">
@@ -171,11 +259,33 @@ if (isset($_SERVER['REQUEST_URI'])) {
             </div>
             <p class="news-meta"> Author: <?= htmlspecialchars($post['author']) ?></p>
             <a href="../" class="back-button">Kembali ke Beranda</a>
-        <?php else: ?>
-            <h1>Berita Tidak Ditemukan</h1>
-            <p>Maaf, berita yang Anda cari tidak tersedia.</p>
-            <a href="../" class="back-button">Kembali ke Beranda</a>
-        <?php endif; ?>
+
+            <hr style="border: 1px solid #ddd; margin: 30px 0;">
+
+            <h5>Komentar</h5>
+                <form method="POST" class="comment-form mb-4 mt-3">
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Komentar</label>
+                        <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Kirim Komentar</button>
+                </form>
+
+                <div class="mt-4 comments-list">
+                    <h5>Daftar Komentar:</h5>
+                    <?php foreach ($comments as $comment): ?>
+                        <div class="comment">
+                            <strong><?= htmlspecialchars($comment['name']) ?></strong>
+                            <p><?= nl2br(htmlspecialchars($comment['comment'])) ?></p>
+                            <small><?= $comment['created_at']->toDateTime()->format('F j, Y, g:i a') ?></small>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <h1>Berita Tidak Ditemukan</h1>
+                <p>Maaf, berita yang Anda cari tidak tersedia.</p>
+                <a href="../" class="back-button">Kembali ke Beranda</a>
+            <?php endif; ?>
     </div>
 
     <footer class="sticky-bottom">
