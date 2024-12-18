@@ -11,52 +11,52 @@ $id = isset($segments[2]) ? $segments[2] : null;
 
 switch ($path) {
     case '/login':
-        include 'login.php';
+        require_once 'login.php';
         break;
 
     case '/':
-        include 'dashboard.php';
+        require_once 'dashboard.php';
         break;
 
     case '/berita':
-        include 'dashboard.php';
+        require_once 'dashboard.php';
         break;
 
     case '/about':
-        include 'about.php';
+        require_once 'about.php';
         break;
 
     case '/faq':
-        include 'faq.php';
+        require_once 'faq.php';
         break;
 
     case '/kategori':
-        include 'kategori.php';
+        require_once 'kategori.php';
         break;
     
     case '/berita/'. $id:
-        include 'berita.php';
+        require_once 'berita.php';
         break;
 
     case '/dashboard':
-        include 'admin/dashboardAdmin.php';
+        require_once 'admin/dashboardAdmin.php';
         break;
 
     case '/tambahBerita':
-        include 'admin/tambahBerita.php';
+        require_once 'admin/tambahBerita.php';
         break;
 
     case '/edit':
         $id = $_GET['id'] ?? null;
         if ($id) {
-            include 'admin/edit.php';
+            require_once 'admin/edit.php';
         }
         break;
 
     case '/hapus':
         $id = $_GET['id'] ?? null;
         if ($id) {
-            include 'admin/hapus.php';
+            require_once 'admin/hapus.php';
         }
         break;
 
