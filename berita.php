@@ -5,6 +5,7 @@ require 'db.php';
 $db = getDB();
 $posts = $db->posts->find();
 $commentsCollection = $db->comments;
+$ratingsCollection = $db->ratings;
 
 function generateSlug($title)
 {
@@ -23,16 +24,25 @@ if (isset($_SERVER['REQUEST_URI'])) {
     }
 }
 
-// Menangani pengiriman komentar
+// Menangani pengiriman komentar dan rating
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
     $name = $_SESSION['username'];
     $comment = htmlspecialchars($_POST['comment']);
+    $rating = (int) $_POST['rating'];
 
-    if (!empty($name) && !empty($comment)) {
+    if (!empty($name) && !empty($comment) && $rating >= 1 && $rating <= 5) {
+        // Simpan komentar
         $commentsCollection->insertOne([
             'post_id' => $post['_id'],
             'name' => $name,
             'comment' => $comment,
+            'created_at' => new MongoDB\BSON\UTCDateTime()
+        ]);
+
+        // Simpan rating
+        $ratingsCollection->insertOne([
+            'post_id' => $post['_id'],
+            'rating' => $rating,
             'created_at' => new MongoDB\BSON\UTCDateTime()
         ]);
     }
@@ -40,6 +50,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
 
 // Mengambil komentar untuk post ini
 $comments = $commentsCollection->find(['post_id' => $post['_id']]);
+
+// Menghitung rata-rata rating untuk post ini
+$ratings = $ratingsCollection->find(['post_id' => $post['_id']]);
+$totalRatings = 0;
+$totalVotes = 0;
+
+foreach ($ratings as $r) {
+    $totalRatings += $r['rating'];
+    $totalVotes++;
+}
+
+$averageRating = $totalVotes > 0 ? round($totalRatings / $totalVotes, 2) : 0;
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +72,7 @@ $comments = $commentsCollection->find(['post_id' => $post['_id']]);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <title><?= isset($post) ? htmlspecialchars($post['title']) : 'Berita Tidak Ditemukan' ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -161,12 +183,10 @@ $comments = $commentsCollection->find(['post_id' => $post['_id']]);
         .comment {
             background-color: #f8f8f8;
             border-left: 5px solid #007bff;
-            /* Add a left border to match the header theme */
             padding: 15px;
             margin-bottom: 15px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             font-size: 14px;
-            /* Smaller text size for comments */
         }
 
         .comment strong {
@@ -198,7 +218,6 @@ $comments = $commentsCollection->find(['post_id' => $post['_id']]);
             overflow-y: auto;
         }
 
-        /* Ensure comment form has the same width as the article content */
         .comment-form {
             width: 100%;
             max-width: 800px;
@@ -253,39 +272,53 @@ $comments = $commentsCollection->find(['post_id' => $post['_id']]);
         <?php if (isset($post)): ?>
             <img src="<?= '../' . htmlspecialchars($post['image']) ?>" alt="Image" class="image">
             <h1 class="news-title"><?= htmlspecialchars($post['title']) ?></h1>
-            <p class="news-meta"><?= htmlspecialchars($post['created_at']->toDateTime()->format('F j, Y')) ?> - <?= htmlspecialchars($post['category']) ?></p>
+            <p class="news-meta">
+                <?= htmlspecialchars($post['created_at']->toDateTime()->format('F j, Y')) ?> -
+                <?= htmlspecialchars($post['category']) ?>
+            </p>
             <div class="news-content">
                 <?= nl2br(htmlspecialchars($post['content'])) ?>
             </div>
-            <p class="news-meta"> Author: <?= htmlspecialchars($post['author']) ?></p>
+            <p class="news-meta">Author: <?= htmlspecialchars($post['author']) ?></p>
             <a href="../" class="back-button">Kembali ke Beranda</a>
 
             <hr style="border: 1px solid #ddd; margin: 30px 0;">
 
-            <h5>Komentar</h5>
-                <form method="POST" class="comment-form mb-4 mt-3">
-                    <div class="mb-3">
-                        <label for="comment" class="form-label">Komentar</label>
-                        <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Kirim Komentar</button>
-                </form>
-
-                <div class="mt-4 comments-list">
-                    <h5>Daftar Komentar:</h5>
-                    <?php foreach ($comments as $comment): ?>
-                        <div class="comment">
-                            <strong><?= htmlspecialchars($comment['name']) ?></strong>
-                            <p><?= nl2br(htmlspecialchars($comment['comment'])) ?></p>
-                            <small><?= $comment['created_at']->toDateTime()->format('F j, Y, g:i a') ?></small>
-                        </div>
-                    <?php endforeach; ?>
+            <h5>Rating</h5>
+            <p>Rata-rata Rating: <strong><?= $averageRating ?>/5</strong> (<?= $totalVotes ?> suara)</p>
+            <form method="POST" class="comment-rating-form mb-4 mt-3">
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Beri Rating:</label>
+                    <select class="form-control" id="rating" name="rating" required>
+                        <option value="1">1 - Sangat Buruk</option>
+                        <option value="2">2 - Buruk</option>
+                        <option value="3">3 - Cukup</option>
+                        <option value="4">4 - Bagus</option>
+                        <option value="5">5 - Sangat Bagus</option>
+                    </select>
                 </div>
-            <?php else: ?>
-                <h1>Berita Tidak Ditemukan</h1>
-                <p>Maaf, berita yang Anda cari tidak tersedia.</p>
-                <a href="../" class="back-button">Kembali ke Beranda</a>
-            <?php endif; ?>
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Komentar</label>
+                    <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Kirim Rating dan Komentar</button>
+            </form>
+
+            <div class="mt-4 comments-list">
+                <h5>Daftar Komentar:</h5>
+                <?php foreach ($comments as $comment): ?>
+                    <div class="comment">
+                        <strong><?= htmlspecialchars($comment['name']) ?></strong>
+                        <p><?= nl2br(htmlspecialchars($comment['comment'])) ?></p>
+                        <small><?= $comment['created_at']->toDateTime()->format('F j, Y, g:i a') ?></small>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <h1>Berita Tidak Ditemukan</h1> 
+            <p>Maaf, berita yang Anda cari tidak tersedia.</p>
+            <a href="../" class="back-button">Kembali ke Beranda</a>
+        <?php endif; ?>
     </div>
 
     <footer class="sticky-bottom">
