@@ -49,7 +49,13 @@ if ($user['password'] !== $password) {
 $_SESSION['username'] = $user['username'];
 $_SESSION['role'] = $user['role'];
 
-// Redirect ke dashboard
-header("Location: dashboard"); 
+if ($_SESSION['role'] == 'admin') {
+    // Redirect ke dashboard
+    header("Location: dashboard"); 
+} else {
+    header("Location: ../Basdat-News/"); 
+}
+
+
 exit();
 ?>

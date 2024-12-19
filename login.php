@@ -1,16 +1,3 @@
-<?php
-session_start(); // Mulai sesi untuk menampilkan pesan error jika ada
-
-// Cek jika ada pesan error dari login.php
-$error_message = $_SESSION['error'] ?? null;
-if ($error_message) {
-    // Tampilkan pesan error dengan alert di JavaScript
-    echo "<script>alert('$error_message');</script>";
-    // Hapus pesan error setelah ditampilkan
-    unset($_SESSION['error']);
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -114,6 +101,7 @@ if ($error_message) {
             <div class="form-group">
                 <button type="submit">Login</button>
             </div>
+            <div class=""></div>
         </form>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

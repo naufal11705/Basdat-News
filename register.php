@@ -8,14 +8,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $newUsers = [
         'username' => $_POST['username'],
         'password' => $_POST['password'],
-        'role' => $_POST['role'],
+        'role' => 'users',
         'created_at' => new MongoDB\BSON\UTCDateTime(),
         'updated_at' => new MongoDB\BSON\UTCDateTime(),
     ];
 
     $insertResult = $collection->insertOne($newUsers);
 
-    header("Location: dashboard");
+    header("Location: ../Basdat-News/");
     exit();
 
 }
@@ -40,9 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <label for="password">Password:</label>
             <input type="text" name="password" required>
-
-            <label for="role">Role:</label>
-            <input type="text" name="role" required>
 
             <button type="submit">Simpan User</button>
         </form>

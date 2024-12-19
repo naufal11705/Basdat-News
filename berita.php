@@ -242,7 +242,7 @@ $comments = $commentsCollection->find(['post_id' => $post['_id']]);
                 </form>
 
                 <div class="text-end">
-                    <a href="login" class="btn btn-outline-light me-2">Login</a>
+                    <a href="../login" class="btn btn-outline-light me-2">Login</a>
                 </div>
 
             </div>
